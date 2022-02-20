@@ -22,6 +22,21 @@ export const GlobalStyles = createGlobalStyle`
     color: #EDEDED;
   }
 
+  ::-webkit-scrollbar {
+    width: 1rem;
+    background-color: #0E0E0E;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 6px inset;
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 5px solid #0E0E0E;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 6px inset;
+    background: #2E2E2E;
+  }
+
+
   img {
     display: block;
     max-width: 100%;
