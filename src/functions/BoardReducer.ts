@@ -15,6 +15,18 @@ const TodoListReducer = (boardData: IBoard[], action: BoardActions) => {
       })
     }
 
+    case Types.Move_Card: {
+      const { indexFrom, indexFromColumn, indexTo, indexToColumn } =
+        action.payload
+
+      return produce(boardData, draft => {
+        const dragged = draft[indexFromColumn].cards[indexFrom]
+
+        draft[indexFromColumn].cards.splice(indexFrom, 1)
+        draft[indexToColumn].cards.splice(indexTo, 0, dragged)
+      })
+    }
+
     default: {
       return boardData
     }
