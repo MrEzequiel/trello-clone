@@ -57,10 +57,7 @@ const ColumnBoard: React.FC<IProps> = ({
       if (dragIndex === hoverIndex) return
 
       const { x: itemDragX } = monitor.getClientOffset() as XYCoord
-      const itemHover = {
-        x: columnRef.current.offsetLeft,
-        y: columnRef.current.offsetTop
-      }
+      const itemHover = columnRef.current.getBoundingClientRect()
       const middleItemHover = columnRef.current.offsetWidth / 2 + itemHover.x
 
       if (itemDragX < middleItemHover && dragIndex < hoverIndex) return

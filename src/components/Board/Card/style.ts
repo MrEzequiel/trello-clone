@@ -7,4 +7,5 @@ export const CardWrapper = styled.li`
   padding: 5px;
   color: #dedede;
   font-size: 1.4rem;
+  min-height: 40px;
 `
