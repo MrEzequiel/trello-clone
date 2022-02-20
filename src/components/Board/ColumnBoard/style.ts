@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const ColumnWrapper = styled.li`
+export const ColumnWrapper = styled.li<{ isDragging: boolean }>`
   flex-shrink: 0;
   width: 240px;
   border-radius: 5px;
@@ -9,6 +9,20 @@ export const ColumnWrapper = styled.li`
 
   display: grid;
   grid-template-rows: 50px 1fr 40px;
+
+  ${({ isDragging }) =>
+    isDragging &&
+    css`
+      pointer-events: none;
+      cursor: grabbing;
+      border-style: dashed;
+      border-width: 2px;
+      background: transparent;
+
+      & > * {
+        opacity: 0;
+      }
+    `}
 `
 
 export const ColumnHeader = styled.header`

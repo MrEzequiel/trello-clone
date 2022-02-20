@@ -1,19 +1,23 @@
 import React from 'react'
-import DataBoards from '../../service/dataBoards'
+import useBoard from '../../hook/useBoard'
 import ColumnBoard from './ColumnBoard'
 
-import { BoardSection, BoardTitle, BoardWrapper } from './style'
+import { BoardSection, BoardTitle, BoardWrapper, BoardContainer } from './style'
 
 const Board: React.FC = () => {
+  const { boardListData } = useBoard()
+
   return (
     <BoardSection>
       <BoardTitle>My Board</BoardTitle>
 
-      <BoardWrapper>
-        {DataBoards.map((board, indexBoard) => (
-          <ColumnBoard key={board.id} {...board} indexColumn={indexBoard} />
-        ))}
-      </BoardWrapper>
+      <BoardContainer>
+        <BoardWrapper>
+          {boardListData.map((board, indexBoard) => (
+            <ColumnBoard key={board.id} {...board} indexColumn={indexBoard} />
+          ))}
+        </BoardWrapper>
+      </BoardContainer>
     </BoardSection>
   )
 }

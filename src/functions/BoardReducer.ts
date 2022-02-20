@@ -5,7 +5,14 @@ import { BoardActions, Types } from '../interfaces/TypesReducer'
 const TodoListReducer = (boardData: IBoard[], action: BoardActions) => {
   switch (action.type) {
     case Types.Move_Column: {
-      return boardData
+      const { indexFrom, indexTo } = action.payload
+
+      return produce(boardData, draft => {
+        const dragged = draft[indexFrom]
+
+        draft.splice(indexFrom, 1)
+        draft.splice(indexTo, 0, dragged)
+      })
     }
 
     default: {

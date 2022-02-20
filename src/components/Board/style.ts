@@ -12,11 +12,24 @@ export const BoardTitle = styled.h2`
   margin-bottom: 10px;
 `
 
-export const BoardWrapper = styled.ul`
+export const BoardContainer = styled.div`
   position: relative;
+  height: 80vh;
+  margin: 0 -20px;
+`
+
+export const BoardWrapper = styled.ul`
   width: 100%;
-  height: 78vh;
-  overflow: auto;
+  height: 100%;
+  padding: 0 20px;
+
+  bottom: 0;
+  left: 0;
+  overflow-x: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateZ(0);
 
   display: flex;
 
@@ -25,4 +38,18 @@ export const BoardWrapper = styled.ul`
   }
 
   padding-bottom: 10px;
+
+  &::-webkit-scrollbar-button {
+    display: block;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-left: none;
+    border-right: none;
+  }
+
+  &::-webkit-scrollbar {
+    border-left: 20px solid #1a1a1a;
+    border-right: 20px solid #1a1a1a;
+  }
 `
