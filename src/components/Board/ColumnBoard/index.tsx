@@ -12,7 +12,7 @@ import {
   ColumnFooter
 } from './style'
 import { MdDragIndicator, MdAdd } from 'react-icons/md'
-import { IDragColumn } from '../../../interfaces/DragItem'
+import { IDragCard, IDragColumn } from '../../../interfaces/DragItem'
 import useBoard from '../../../hook/useBoard'
 import { Types } from '../../../interfaces/TypesReducer'
 
@@ -28,7 +28,7 @@ const ColumnBoard: React.FC<IProps> = ({
   indexColumn
 }) => {
   const columnRef = useRef<HTMLLIElement | null>(null)
-  const { dispatch } = useBoard()
+  const { dispatch, boardListData } = useBoard()
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: 'COLUMN',
@@ -37,6 +37,38 @@ const ColumnBoard: React.FC<IProps> = ({
       isDragging: monitor.isDragging()
     }),
     isDragging: monitor => monitor.getItem().id === id
+  })
+
+  const [{ handlerColumnBodyId, canDrop }, dropColumnBody] = useDrop<
+    IDragCard,
+    void,
+    { handlerColumnBodyId: Identifier | null; canDrop: boolean }
+  >({
+    accept: 'CARD',
+    collect: monitor => ({
+      handlerColumnBodyId: monitor.getHandlerId(),
+      canDrop: monitor.isOver()
+    }),
+    hover(item) {
+      const dragIndex = item.indexCard
+      const dragColumn = item.indexColumn
+
+      const hoverIndex = indexColumn
+
+      if (dragColumn === hoverIndex) return
+
+      dispatch({
+        type: Types.Add_Card_To_Column,
+        payload: {
+          index: dragIndex,
+          indexColumn: dragColumn,
+          indexToColumn: hoverIndex
+        }
+      })
+
+      item.indexColumn = hoverIndex
+      item.indexCard = boardListData[indexColumn].cards.length
+    }
   })
 
   const [{ handlerId }, drop] = useDrop<
@@ -93,7 +125,11 @@ const ColumnBoard: React.FC<IProps> = ({
         </ColumnDragHandle>
       </ColumnHeader>
 
-      <ColumnBody>
+      <ColumnBody
+        canDrop={canDrop}
+        data-handler-id={handlerColumnBodyId}
+        ref={dropColumnBody}
+      >
         {cards.map((card, index) => (
           <Card
             key={card.id}

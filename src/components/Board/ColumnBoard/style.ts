@@ -49,13 +49,15 @@ export const ColumnDragHandle = styled.div`
   color: #b2b2b2;
 `
 
-export const ColumnBody = styled.ul`
+export const ColumnBody = styled.ul<{ canDrop: boolean }>`
   padding: 20px 10px;
   overflow-y: auto;
 
   & > *:not(:last-child) {
     margin-bottom: 10px;
   }
+
+  background: ${({ canDrop }) => (canDrop ? '#2e2e2e' : 'transparent')};
 `
 
 export const ColumnFooter = styled.footer`

@@ -29,7 +29,6 @@ export const CardWrapper = styled.li<{ isDragging: boolean }>`
 
 export const CardDragIndicator = styled.div`
   cursor: grab;
-  width: 30px;
   height: 30px;
 
   display: flex;
