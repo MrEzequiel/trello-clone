@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components'
 
-export const ColumnWrapper = styled.li<{ isDragging: boolean }>`
+export const ColumnWrapper = styled.li<{
+  isDragging: boolean
+  isLayer: boolean
+}>`
   flex-shrink: 0;
   width: 240px;
   border-radius: 5px;
@@ -22,6 +25,13 @@ export const ColumnWrapper = styled.li<{ isDragging: boolean }>`
       & > * {
         opacity: 0;
       }
+    `}
+
+  ${({ isLayer }) =>
+    isLayer &&
+    css`
+      box-shadow: 0 8px 8px -2px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05) rotate(-2deg);
     `}
 `
 

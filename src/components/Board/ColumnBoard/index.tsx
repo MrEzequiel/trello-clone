@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import IBoard from '../../../interfaces/Board'
 import { useDrag, useDrop, XYCoord } from 'react-dnd'
 import Card from '../Card'
@@ -15,9 +15,12 @@ import { MdDragIndicator, MdAdd } from 'react-icons/md'
 import { IDragCard, IDragColumn } from '../../../interfaces/DragItem'
 import useBoard from '../../../hook/useBoard'
 import { Types } from '../../../interfaces/TypesReducer'
+import { getEmptyImage } from 'react-dnd-html5-backend'
 
 interface IProps extends IBoard {
   indexColumn: number
+  isLayer?: boolean
+  [x: string]: any
 }
 
 const ColumnBoard: React.FC<IProps> = ({
@@ -25,14 +28,21 @@ const ColumnBoard: React.FC<IProps> = ({
   icon,
   cards,
   id,
-  indexColumn
+  indexColumn,
+  isLayer = false,
+  ...props
 }) => {
   const columnRef = useRef<HTMLLIElement | null>(null)
   const { dispatch, boardListData } = useBoard()
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: 'COLUMN',
-    item: () => ({ id, indexColumn }),
+    item: () => ({
+      id,
+      indexColumn,
+      width: columnRef!.current?.offsetWidth,
+      height: columnRef!.current?.offsetHeight
+    }),
     collect: monitor => ({
       isDragging: monitor.isDragging()
     }),
@@ -107,13 +117,19 @@ const ColumnBoard: React.FC<IProps> = ({
     }
   })
 
-  drop(preview(columnRef))
+  drop(columnRef)
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: false })
+  }, [preview])
 
   return (
     <ColumnWrapper
       ref={columnRef}
-      isDragging={isDragging}
+      isDragging={!isLayer && isDragging}
+      isLayer={isLayer}
       data-handler-id={handlerId}
+      {...props}
     >
       <ColumnHeader>
         <h3>
@@ -149,4 +165,4 @@ const ColumnBoard: React.FC<IProps> = ({
   )
 }
 
-export default ColumnBoard
+export default memo(ColumnBoard)

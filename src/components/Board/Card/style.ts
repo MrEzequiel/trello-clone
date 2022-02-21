@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components'
 
-export const CardWrapper = styled.li<{ isDragging: boolean }>`
+export const CardWrapper = styled.li<{
+  isDragging: boolean
+  isLayer?: boolean
+}>`
   background: #393939;
   box-shadow: 0 4px 4px -1px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -25,9 +28,22 @@ export const CardWrapper = styled.li<{ isDragging: boolean }>`
         opacity: 0;
       }
     `}
+
+  ${({ isLayer }) =>
+    isLayer &&
+    css`
+      cursor: grabbing !important;
+      pointer-events: none;
+      transform: rotate(2deg);
+
+      & > * {
+        cursor: grabbing !important;
+      }
+    `}
 `
 
-export const CardDragIndicator = styled.div`
+export const CardDragIndicator = styled.button`
+  background: transparent;
   cursor: grab;
   height: 30px;
 

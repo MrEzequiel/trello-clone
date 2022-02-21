@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import { MdDragIndicator } from 'react-icons/md'
 import ICard from '../../../interfaces/Card'
@@ -8,6 +8,7 @@ import type { Identifier } from 'dnd-core'
 import { CardDragIndicator, CardWrapper } from './style'
 import useBoard from '../../../hook/useBoard'
 import { Types } from '../../../interfaces/TypesReducer'
+import { getEmptyImage } from 'react-dnd-html5-backend'
 
 interface ICardProps extends ICard {
   indexColumn: number
@@ -16,11 +17,19 @@ interface ICardProps extends ICard {
 
 const Card: React.FC<ICardProps> = ({ name, id, indexCard, indexColumn }) => {
   const { dispatch } = useBoard()
-  const cardRef = useRef<HTMLLIElement | null>(null)
+  const dropRef = useRef<HTMLLIElement | null>(null)
+  const dragRef = useRef<HTMLButtonElement | null>(null)
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: 'CARD',
-    item: () => ({ id, indexColumn, indexCard }),
+    item: () => ({
+      id,
+      indexColumn,
+      indexCard,
+      name,
+      width: dropRef!.current?.offsetWidth,
+      height: dropRef!.current?.offsetHeight
+    }),
     collect: monitor => ({
       isDragging: monitor.isDragging()
     }),
@@ -46,7 +55,7 @@ const Card: React.FC<ICardProps> = ({ name, id, indexCard, indexColumn }) => {
 
       if (dragIndex === hoverIndex && dragColumn === hoverColumn) return
 
-      const hoverBoundingRect = cardRef.current!.getBoundingClientRect()
+      const hoverBoundingRect = dropRef.current!.getBoundingClientRect()
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
 
@@ -71,20 +80,25 @@ const Card: React.FC<ICardProps> = ({ name, id, indexCard, indexColumn }) => {
     }
   })
 
-  drop(preview(cardRef))
+  drop(drag(dropRef))
+  drag(dragRef)
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: false })
+  }, [preview])
 
   return (
     <CardWrapper
-      ref={cardRef}
       isDragging={isDragging}
+      ref={dropRef}
       data-handler-id={handlerId}
     >
       <p>{name}</p>
-      <CardDragIndicator ref={drag}>
+      <CardDragIndicator type="button" ref={dragRef}>
         <MdDragIndicator />
       </CardDragIndicator>
     </CardWrapper>
   )
 }
 
-export default Card
+export default memo(Card)
