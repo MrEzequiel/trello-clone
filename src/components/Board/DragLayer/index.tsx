@@ -156,6 +156,12 @@ const CardLayer: FC = () => {
       })
   }, [currentOffset, itemType, ref])
 
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+  })
+
   if (!item || !isDragging || !item.width) {
     return null
   }
