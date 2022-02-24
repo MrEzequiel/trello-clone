@@ -1,4 +1,4 @@
-import produce from 'immer'
+import produce, { setAutoFreeze } from 'immer'
 import { v4 as uuidv4 } from 'uuid'
 import IBoard from '../interfaces/Board'
 import ICard from '../interfaces/Card'
@@ -10,6 +10,7 @@ const TodoListReducer = (boardData: IBoard[], action: BoardActions) => {
       const { indexFrom, indexTo } = action.payload
 
       return produce(boardData, draft => {
+        setAutoFreeze(false)
         const dragged = draft[indexFrom]
 
         draft.splice(indexFrom, 1)
@@ -22,6 +23,7 @@ const TodoListReducer = (boardData: IBoard[], action: BoardActions) => {
         action.payload
 
       return produce(boardData, draft => {
+        setAutoFreeze(false)
         const dragged = draft[indexFromColumn].cards[indexFrom]
 
         draft[indexFromColumn].cards.splice(indexFrom, 1)
@@ -30,6 +32,7 @@ const TodoListReducer = (boardData: IBoard[], action: BoardActions) => {
     }
 
     case Types.Add_Card_To_Column: {
+      setAutoFreeze(false)
       const { index, indexColumn, indexToColumn } = action.payload
 
       return produce(boardData, draft => {
@@ -64,7 +67,7 @@ const TodoListReducer = (boardData: IBoard[], action: BoardActions) => {
           name
         }
 
-        board.cards.push(newCard)
+        board.cards = [...board.cards, newCard]
         return board
       })
     }
