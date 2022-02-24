@@ -1,10 +1,19 @@
-import { FC, CSSProperties, memo } from 'react'
+import {
+  FC,
+  CSSProperties,
+  memo,
+  useContext,
+  useRef,
+  useState,
+  useEffect
+} from 'react'
 import { XYCoord, useDragLayer } from 'react-dnd'
 
 import { CardDragIndicator, CardWrapper } from '../Card/style'
 import { MdDragIndicator } from 'react-icons/md'
 import ColumnBoard from '../ColumnBoard'
 import useBoard from '../../../hook/useBoard'
+import ContextRef from '../../../context/ContainerRefContext'
 
 const layerStyles: CSSProperties = {
   position: 'fixed',
@@ -37,12 +46,19 @@ function getItemStyles(
 
 const CardLayer: FC = () => {
   const { boardListData } = useBoard()
+  const { ref } = useContext(ContextRef)
+  const [isEndOfTheList, setIsEndOfTheList] = useState({
+    end: false,
+    direction: 'left'
+  })
+  const intervalRef = useRef<NodeJS.Timer>()
+
   const { itemType, isDragging, item, initialOffset, currentOffset } =
     useDragLayer(monitor => ({
       item: monitor.getItem(),
       itemType: monitor.getItemType(),
       initialOffset: monitor.getInitialSourceClientOffset(),
-      currentOffset: monitor.getSourceClientOffset(),
+      currentOffset: monitor.getSourceClientOffset() as XYCoord,
       isDragging: monitor.isDragging()
     }))
 
@@ -85,6 +101,60 @@ const CardLayer: FC = () => {
         return null
     }
   }
+
+  useEffect(() => {
+    if (isEndOfTheList.end) {
+      intervalRef.current = setInterval(() => {
+        if (ref.current) {
+          if (isEndOfTheList.direction === 'right') {
+            ref.current.scrollLeft += 2
+          } else {
+            ref.current.scrollLeft -= 2
+          }
+        }
+      }, 2)
+    } else {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+  }, [isEndOfTheList, ref, intervalRef])
+
+  useEffect(() => {
+    if (itemType === 'COLUMN' && ref.current && currentOffset) {
+      const { width } = ref.current.getBoundingClientRect()
+      const { x } = currentOffset
+
+      if (width - 100 < x) {
+        setIsEndOfTheList({
+          end: true,
+          direction: 'right'
+        })
+        return
+      }
+
+      if (x < 200) {
+        setIsEndOfTheList({
+          end: true,
+          direction: 'left'
+        })
+        return
+      }
+
+      setIsEndOfTheList({
+        end: false,
+        direction: 'left'
+      })
+    }
+
+    return () =>
+      setIsEndOfTheList({
+        end: false,
+        direction: 'left'
+      })
+  }, [currentOffset, itemType, ref])
 
   if (!item || !isDragging || !item.width) {
     return null

@@ -1,4 +1,4 @@
-import { createContext, FC, useEffect, useReducer } from 'react'
+import { createContext, FC, useReducer } from 'react'
 import IBoard from '../interfaces/Board'
 import DataBoards from '../service/dataBoards'
 import BoardReducer from '../functions/BoardReducer'

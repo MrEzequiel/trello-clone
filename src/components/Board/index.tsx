@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { MdAdd } from 'react-icons/md'
+import ContextRef from '../../context/ContainerRefContext'
 import useBoard from '../../hook/useBoard'
 import { Types } from '../../interfaces/TypesReducer'
 import ColumnBoard from './ColumnBoard'
@@ -16,6 +17,7 @@ import {
 
 const Board: React.FC = () => {
   const { boardListData, dispatch } = useBoard()
+  const containerRef = useRef<HTMLUListElement | null>(null)
 
   const [nameColumn, setNameColumn] = useState('')
   const inputNameColumnRef = useRef<HTMLInputElement | null>(null)
@@ -34,12 +36,12 @@ const Board: React.FC = () => {
   }
 
   return (
-    <>
+    <ContextRef.Provider value={{ ref: containerRef }}>
       <BoardSection>
         <BoardTitle>My Board</BoardTitle>
 
         <BoardContainer>
-          <BoardWrapper>
+          <BoardWrapper ref={containerRef}>
             {boardListData.map((board, indexBoard) => (
               <ColumnBoard key={board.id} {...board} indexColumn={indexBoard} />
             ))}
@@ -68,9 +70,8 @@ const Board: React.FC = () => {
           </BoardWrapper>
         </BoardContainer>
       </BoardSection>
-
       <DragLayer />
-    </>
+    </ContextRef.Provider>
   )
 }
 
