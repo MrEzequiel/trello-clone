@@ -13,7 +13,9 @@ type ActionMap<M extends { [index: string]: any }> = {
 export enum Types {
   Move_Column = 'Move_Column', // eslint-disable-line
   Move_Card = 'Move_Card', // eslint-disable-line
-  Add_Card_To_Column = 'Add_Card_To_Column' // eslint-disable-line
+  Add_Card_To_Column = 'Add_Card_To_Column', // eslint-disable-line
+  Create_Column = 'Create_Column', // eslint-disable-line
+  Create_Card = 'Create_Card' // eslint-disable-line
 }
 
 type BoardPayload = {
@@ -31,6 +33,13 @@ type BoardPayload = {
     index: number
     indexColumn: number
     indexToColumn: number
+  }
+  [Types.Create_Column]: {
+    name: string
+  }
+  [Types.Create_Card]: {
+    name: string
+    idColumn: string
   }
 }
 

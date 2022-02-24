@@ -1,9 +1,12 @@
 import styled, { css } from 'styled-components'
 
-export const ColumnWrapper = styled.li<{
+interface IColumnWrapper {
   isDragging: boolean
   isLayer: boolean
-}>`
+}
+
+export const ColumnWrapper = styled.li<IColumnWrapper>`
+  overflow: hidden;
   flex-shrink: 0;
   width: 240px;
   border-radius: 5px;
@@ -31,7 +34,7 @@ export const ColumnWrapper = styled.li<{
     isLayer &&
     css`
       box-shadow: 0 8px 8px -2px rgba(0, 0, 0, 0.2);
-      transform: scale(1.05) rotate(-2deg);
+      transform: scale(1.05) rotate(-2deg) translateX(8px);
     `}
 `
 
@@ -72,17 +75,45 @@ export const ColumnBody = styled.ul<{ canDrop: boolean }>`
 
 export const ColumnFooter = styled.footer`
   background: #404040;
-  padding: 0 10px;
   display: flex;
   align-items: center;
+  overflow: hidden;
 
   button {
     display: flex;
     align-items: center;
-    justify-content: center;
+    width: 100%;
+    height: 100%;
 
     cursor: pointer;
+    padding: 0 10px;
     background-color: transparent;
-    color: #dedede;
+  }
+`
+
+export const FormAddCard = styled.form`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  input {
+    flex: 1;
+    padding: 0 10px;
+    background: none;
+  }
+
+  & > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border-radius: 5px;
+    margin: 5px;
+    background: #2e2e2e;
   }
 `

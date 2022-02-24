@@ -1,53 +1,55 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import IBoard from '../interfaces/Board'
 
 const DataBoards: IBoard[] = [
   {
-    id: '1',
+    id: uuidv4(),
     title: 'To Do',
     icon: '📝',
     cards: [
       {
-        id: '1',
+        id: uuidv4(),
         name: 'Create a new project'
       }
     ]
   },
 
   {
-    id: '2',
+    id: uuidv4(),
     title: 'In Progress',
     icon: '⏳',
     cards: [
       {
-        id: '2',
+        id: uuidv4(),
         name: 'Create a trello clone'
       },
       {
-        id: '3',
+        id: uuidv4(),
         name: 'Add a new feature'
       }
     ]
   },
 
   {
-    id: '3',
+    id: uuidv4(),
     title: 'Done',
     icon: '✅',
     cards: [
       {
-        id: '4',
+        id: uuidv4(),
         name: 'Create a tier list'
       }
     ]
   },
 
   {
-    id: '4',
+    id: uuidv4(),
     title: 'Cancelled',
     icon: '❌',
     cards: [
       {
-        id: '5',
+        id: uuidv4(),
         name: 'Port the project to Vue'
       }
     ]

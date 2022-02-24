@@ -21,6 +21,7 @@
     "react-scripts": "5.0.0",
     "styled-components": "^5.3.3",
     "typescript": "^4.4.2",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
@@ -50,6 +51,7 @@
   "devDependencies": {
     "@types/react-dnd-multi-backend": "^6.0.1",
     "@types/styled-components": "^5.1.23",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "@typescript-eslint/parser": "^5.12.0",
     "eslint": "^7.32.0",

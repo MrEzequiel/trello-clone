@@ -1,5 +1,7 @@
 import produce from 'immer'
+import { v4 as uuidv4 } from 'uuid'
 import IBoard from '../interfaces/Board'
+import ICard from '../interfaces/Card'
 import { BoardActions, Types } from '../interfaces/TypesReducer'
 
 const TodoListReducer = (boardData: IBoard[], action: BoardActions) => {
@@ -35,6 +37,35 @@ const TodoListReducer = (boardData: IBoard[], action: BoardActions) => {
 
         draft[indexColumn].cards.splice(index, 1)
         draft[indexToColumn].cards.push(dragged)
+      })
+    }
+
+    case Types.Create_Column: {
+      const { name } = action.payload
+
+      const newColumn: IBoard = {
+        id: uuidv4(),
+        title: name,
+        icon: '📌',
+        cards: []
+      }
+
+      return [...boardData, newColumn]
+    }
+
+    case Types.Create_Card: {
+      const { name, idColumn } = action.payload
+
+      return boardData.map(board => {
+        if (board.id !== idColumn) return board
+
+        const newCard: ICard = {
+          id: uuidv4(),
+          name
+        }
+
+        board.cards.push(newCard)
+        return board
       })
     }
 

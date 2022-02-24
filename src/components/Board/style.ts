@@ -53,3 +53,56 @@ export const BoardWrapper = styled.ul`
     border-right: 20px solid #1a1a1a;
   }
 `
+
+export const AddColumn = styled.li`
+  flex-shrink: 0;
+  width: 240px;
+  height: min-content;
+  border-radius: 5px;
+
+  background: #1e1e1e;
+  color: #ccc;
+  &:hover {
+    filter: brightness(1.08);
+    color: #ededed;
+  }
+
+  & > button {
+    cursor: pointer;
+    background: transparent;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    gap: 5px;
+  }
+`
+
+export const FormAddColumn = styled.form`
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+
+  input {
+    flex: 1;
+    background: transparent;
+    padding: 10px 5px;
+    margin-left: 5px;
+  }
+
+  button {
+    flex-shrink: 0;
+    background: transparent;
+    height: 36px;
+    width: 36px;
+    border-radius: 3px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2e2e2e;
+    box-shadow: -4px 0px 4px -1px rgb(0, 0, 0, 0.1);
+  }
+`

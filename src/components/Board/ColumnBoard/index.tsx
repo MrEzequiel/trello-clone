@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import IBoard from '../../../interfaces/Board'
 import { useDrag, useDrop, XYCoord } from 'react-dnd'
 import Card from '../Card'
@@ -9,7 +9,8 @@ import {
   ColumnHeader,
   ColumnDragHandle,
   ColumnBody,
-  ColumnFooter
+  ColumnFooter,
+  FormAddCard
 } from './style'
 import { MdDragIndicator, MdAdd } from 'react-icons/md'
 import { IDragCard, IDragColumn } from '../../../interfaces/DragItem'
@@ -33,7 +34,39 @@ const ColumnBoard: React.FC<IProps> = ({
   ...props
 }) => {
   const columnRef = useRef<HTMLLIElement | null>(null)
+  const cardInputRef = useRef<HTMLInputElement | null>(null)
+  const [nameCard, setNameCard] = useState('')
+
   const { dispatch, boardListData } = useBoard()
+
+  const [isAddingCard, setIsAddingCard] = useState(false)
+
+  const handleAddCard = (e: React.SyntheticEvent) => {
+    e.preventDefault()
+
+    if (nameCard.trim() === '') {
+      return
+    }
+
+    dispatch({
+      type: Types.Create_Card,
+      payload: {
+        idColumn: id,
+        name: nameCard
+      }
+    })
+    handleCloseAddCard()
+  }
+
+  const handleCloseAddCard = () => {
+    setIsAddingCard(false)
+    setNameCard('')
+  }
+
+  const handleShowAddCard = () => {
+    setIsAddingCard(true)
+    if (cardInputRef.current) cardInputRef.current.focus()
+  }
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: 'COLUMN',
@@ -157,9 +190,25 @@ const ColumnBoard: React.FC<IProps> = ({
       </ColumnBody>
 
       <ColumnFooter>
-        <button type="button">
-          <MdAdd /> Add a card
-        </button>
+        {isAddingCard ? (
+          <FormAddCard onSubmit={handleAddCard}>
+            <input
+              type="text"
+              placeholder="Enter a name for the card"
+              ref={cardInputRef}
+              onBlur={() => setTimeout(handleCloseAddCard, 200)}
+              value={nameCard}
+              onChange={e => setNameCard(e.target.value)}
+            />
+            <button type="submit">
+              <MdAdd />
+            </button>
+          </FormAddCard>
+        ) : (
+          <button type="button" onClick={handleShowAddCard}>
+            <MdAdd /> Add a card
+          </button>
+        )}
       </ColumnFooter>
     </ColumnWrapper>
   )

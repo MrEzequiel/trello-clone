@@ -3,7 +3,7 @@ import ICard from './Card'
 interface IBoard {
   id: string
   title: string
-  icon: '📝' | '⏳' | '❌' | '✅'
+  icon: '📝' | '⏳' | '❌' | '✅' | '📌'
 
   cards: ICard[]
 }
